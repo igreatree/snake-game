@@ -182,12 +182,12 @@ export const Game = ({size}: IGameProps) => {
         </div>
         {isMobile &&
             <div className={styles.controller}>
-                <button onClick={() => onKeyDown({code: "KeyW"} as KeyboardEvent)}>⬆</button>
+                <button className={styles.up} onClick={() => onKeyDown({code: "KeyW"} as KeyboardEvent)}>⮕</button>
                 <div>
-                    <button onClick={() => onKeyDown({code: "KeyA"} as KeyboardEvent)}>⬅</button>
-                    <button onClick={() => onKeyDown({code: "KeyD"} as KeyboardEvent)}>⮕</button>
+                    <button className={styles.left} onClick={() => onKeyDown({code: "KeyA"} as KeyboardEvent)}>⮕</button>
+                    <button className={styles.right} onClick={() => onKeyDown({code: "KeyD"} as KeyboardEvent)}>⮕</button>
                 </div>
-                <button onClick={() => onKeyDown({code: "KeyS"} as KeyboardEvent)}>⬇</button>
+                <button className={styles.down} onClick={() => onKeyDown({code: "KeyS"} as KeyboardEvent)}>⮕</button>
             </div>
         }
     </div>;
