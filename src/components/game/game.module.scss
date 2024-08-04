@@ -1,0 +1,49 @@
+.game {
+    width: 100%;
+    height: 100%;
+    canvas {
+        width: 100%;
+        height: 100%;
+    }
+    .info {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.21);
+        h3 {
+            font-size: 50px;
+            margin-bottom: -20px;
+        }
+        p {
+            font-size: 20px;
+        }
+        div {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+    .controller {
+        position: absolute;
+        opacity: 0.4;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        div {
+            display: flex;
+            gap: 40px;
+        }
+    }
+}
