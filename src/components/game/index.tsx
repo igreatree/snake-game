@@ -39,10 +39,6 @@ export const Game = ({size}: IGameProps) => {
     // const apples : tApplePosition[] = [{y: -400, x: 10, type: "default"}, {y: -350, x: -10, type: "default"}, {y: -300, x: 15, type: "default"}, {y: -250, x: -15, type: "default"}, {y: -200, x: 20, type: "default"}, {y: -150, x: -20, type: "default"}];
     // const apples : tApplePosition[] = [{x: -400, y: 10, type: "default"}, {x: -350, y: -10, type: "default"}, {x: -300, y: 15, type: "default"}, {x: -250, y: -15, type: "default"}, {x: -200, y: 20, type: "default"}, {x: -150, y: -20, type: "default"}];
 
-    // appleSound.volume = 10;
-    // themeSound.volume = 10;
-    // bonusSound.volume = 10;
-
     // motion controller
     const processPos = {
         x: (pos: number) => {
@@ -61,22 +57,22 @@ export const Game = ({size}: IGameProps) => {
         switch (e.code) {
             case "ArrowUp":
             case "KeyW":
-                if(direction.current.y === speed.current) return
+                if(direction.current.y > 0) return
                 direction.current = {x: 0, y: -speed.current};
                 break;
             case "ArrowDown":
             case "KeyS":
-                if(direction.current.y === -speed.current) return
+                if(direction.current.y < 0) return
                 direction.current = {x: 0, y: speed.current};
                 break;
             case "ArrowLeft":
             case "KeyA":
-                if(direction.current.x === speed.current) return
+                if(direction.current.x > 0) return
                 direction.current = {x: -speed.current, y: 0};
                 break;
             case "ArrowRight":
             case "KeyD":
-                if(direction.current.x === -speed.current) return
+                if(direction.current.x < 0) return
                 direction.current = {x: speed.current, y: 0};
                 break;
             case "Space":
