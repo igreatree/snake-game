@@ -18,6 +18,7 @@ export default defineConfig({
       short_name: 'Snake',
       description: 'Game for fun',
       theme_color: '#ffffff',
+      start_url: '/snake-game',
       icons: [
         {
           src: 'pwa-192x192.png',
