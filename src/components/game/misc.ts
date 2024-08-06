@@ -17,3 +17,62 @@ export const generateRandomPos = (size: {width: number, height: number}, cell: n
 export const checkIntersects = (a: Position, b: Position, admission: number) => {
     return (b.x - admission / 2 <= a.x && a.x <= b.x + admission / 2) && (b.y - admission / 3 <= a.y && a.y <= b.y + admission / 3)
 }
+
+interface ISwipeControllerProps {
+    up: () => void
+    down: () => void,
+    right: () => void,
+    left: () => void,
+}
+
+export const swipeController = ({
+    up,
+    down,
+    right,
+    left
+}: ISwipeControllerProps) => {
+    let xDown = 0;                                                        
+    let yDown = 0;
+
+    const getTouches = (evt: TouchEvent) => {
+        return evt.touches
+    }                                
+                                                                         
+    const handleTouchStart = (evt: TouchEvent) => {
+        const firstTouch = getTouches(evt)[0];                                      
+        xDown = firstTouch.clientX;                                      
+        yDown = firstTouch.clientY;                                      
+    };                                                
+                                                                         
+    const handleTouchMove = (evt: TouchEvent) => {
+        if ( !xDown || !yDown ) {
+            return;
+        }
+
+        const xUp = evt.touches[0].clientX;                                    
+        const yUp = evt.touches[0].clientY;
+
+        const xDiff = xDown - xUp;
+        const yDiff = yDown - yUp;
+                                                                            
+        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
+            if ( xDiff > 0 ) {
+                left();
+            } else {
+                right();
+            }                       
+        } else {
+            if ( yDiff > 0 ) {
+                up();
+            } else {
+                down();
+            }                                                                 
+        }
+        xDown = 0;
+        yDown = 0;                                             
+    };
+    return {
+        handleTouchStart,
+        handleTouchMove
+    }
+}

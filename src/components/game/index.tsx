@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Space } from "canv";
 import { Snake } from "./Snake";
 import { Apple, tApplePosition } from "./Apple";
-import { checkIntersects, generateRandomPos, Position, Size } from "./misc";
+import { checkIntersects, generateRandomPos, Position, Size, swipeController } from "./misc";
 import styles from "./game.module.scss";
 import AppleAudio from "../../assets/apple.mp3";
 import BonusAudio from "../../assets/bonus.mp3";
 import ThemeAudio from "../../assets/theme.mp3";
+import SwipeToMoveImage from "../../assets/swipe-to-move.png"
+import WASDImage from "../../assets/wasd.png"
 
 interface IGameProps {
     size: Size
@@ -88,6 +90,13 @@ export const Game = ({size}: IGameProps) => {
         }
     };
 
+    const { handleTouchStart, handleTouchMove } = swipeController({
+        up: () => onKeyDown({code: "ArrowUp"} as KeyboardEvent),
+        down: () => onKeyDown({code: "ArrowDown"} as KeyboardEvent),
+        right: () => onKeyDown({code: "ArrowRight"} as KeyboardEvent),
+        left: () => onKeyDown({code: "ArrowLeft"} as KeyboardEvent),
+    })
+
     useEffect(() => {
         if(hasLoaded.current){
             console.log("Effect ran");
@@ -95,7 +104,9 @@ export const Game = ({size}: IGameProps) => {
         } 
         if(!canvas.current || start) return
         hasLoaded.current = true
-        document.addEventListener("keydown", onKeyDown);
+        document.addEventListener("keydown", onKeyDown, false);
+        document.addEventListener("touchstart", handleTouchStart, false);        
+        document.addEventListener("touchmove", handleTouchMove, false);
         const space = Space(canvas.current, {scale: 1});
         const snake =  space.addDrawable(Snake(cellSize));
         space.addDrawable(Apple({pos: apples, size: cellSize}));
@@ -163,6 +174,8 @@ export const Game = ({size}: IGameProps) => {
 
                 return () => {
                     document.removeEventListener("keydown", onKeyDown);
+                    document.removeEventListener("touchstart", handleTouchStart);        
+                    document.removeEventListener("touchmove", handleTouchMove);
                     clearInterval(animation);
                 }
             }, framesPerSecond);
@@ -171,14 +184,21 @@ export const Game = ({size}: IGameProps) => {
     }, [start]);
 
     if(start) return <div className={styles.game}>
-        <button
-            onClick={() => {
-                themeAudio.play();
-                setStart(false);
-            }}
-        >
-            Start
-        </button>
+        <div className={styles.start}>
+            <h1>Snake</h1>
+            <p>by Islam Gaibullaev</p>
+            <button
+                className={styles.gradientBorder}
+                onClick={() => {
+                    themeAudio.play();
+                    setStart(false);
+                }}
+            >
+                Start Game
+            </button>
+            <img src={isMobile ? SwipeToMoveImage : WASDImage} alt="info" width={100} />
+            <p>{isMobile ? "swipe to rotate" : "use w,a,s,d or arrows to rotate"}</p>
+        </div>
     </div>
 
     return <div className={styles.game}>
@@ -211,15 +231,5 @@ export const Game = ({size}: IGameProps) => {
                 </>
             }
         </div>
-        {isMobile &&
-            <div className={styles.controller}>
-                <button className={styles.up} onClick={() => onKeyDown({code: "KeyW"} as KeyboardEvent)}>⮕</button>
-                <div>
-                    <button className={styles.left} onClick={() => onKeyDown({code: "KeyA"} as KeyboardEvent)}>⮕</button>
-                    <button className={styles.right} onClick={() => onKeyDown({code: "KeyD"} as KeyboardEvent)}>⮕</button>
-                </div>
-                <button className={styles.down} onClick={() => onKeyDown({code: "KeyS"} as KeyboardEvent)}>⮕</button>
-            </div>
-        }
     </div>;
 }
