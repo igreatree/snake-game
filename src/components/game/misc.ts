@@ -15,7 +15,7 @@ export const generateRandomPos = (size: {width: number, height: number}, cell: n
 });
 
 export const checkIntersects = (a: Position, b: Position, admission: number) => {
-    return (b.x - admission / 2 <= a.x && a.x <= b.x + admission / 2) && (b.y - admission / 3 <= a.y && a.y <= b.y + admission / 3)
+    return (b.x - admission <= a.x && a.x <= b.x + admission) && (b.y - admission <= a.y && a.y <= b.y + admission)
 }
 
 interface ISwipeControllerProps {

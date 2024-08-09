@@ -7,8 +7,8 @@ import styles from "./game.module.scss";
 import AppleAudio from "../../assets/apple.mp3";
 import BonusAudio from "../../assets/bonus.mp3";
 import ThemeAudio from "../../assets/theme.mp3";
-import SwipeToMoveImage from "../../assets/swipe-to-move.png"
-import WASDImage from "../../assets/wasd.png"
+import SwipeToMoveImage from "../../assets/swipe-to-move.png";
+import WASDImage from "../../assets/wasd.png";
 
 interface IGameProps {
     size: Size
@@ -37,10 +37,6 @@ export const Game = ({size}: IGameProps) => {
     const [score, setScore] = useState(0);
     const apples : tApplePosition[] = [{...generateRandomPos(size, cellSize), type: "default"}];
 
-    // for tests
-    // const apples : tApplePosition[] = [{y: -400, x: 10, type: "default"}, {y: -350, x: -10, type: "default"}, {y: -300, x: 15, type: "default"}, {y: -250, x: -15, type: "default"}, {y: -200, x: 20, type: "default"}, {y: -150, x: -20, type: "default"}];
-    // const apples : tApplePosition[] = [{x: -400, y: 10, type: "default"}, {x: -350, y: -10, type: "default"}, {x: -300, y: 15, type: "default"}, {x: -250, y: -15, type: "default"}, {x: -200, y: 20, type: "default"}, {x: -150, y: -20, type: "default"}];
-
     // motion controller
     const processPos = {
         x: (pos: number) => {
@@ -54,27 +50,29 @@ export const Game = ({size}: IGameProps) => {
             return pos
         },
     }
-    const direction = useRef({x: 0, y: speed.current})
+    const direction = useRef({x: 0, y: speed.current});
+    const currentDirection = useRef(direction.current);
+    const lastRotate = useRef({x: 0, y: 0});
     const onKeyDown = (e: KeyboardEvent) => {
         switch (e.code) {
             case "ArrowUp":
             case "KeyW":
-                if(direction.current.y > 0) return
+                if(currentDirection.current.y > 0) return
                 direction.current = {x: 0, y: -speed.current};
                 break;
             case "ArrowDown":
             case "KeyS":
-                if(direction.current.y < 0) return
+                if(currentDirection.current.y < 0) return
                 direction.current = {x: 0, y: speed.current};
                 break;
             case "ArrowLeft":
             case "KeyA":
-                if(direction.current.x > 0) return
+                if(currentDirection.current.x > 0) return
                 direction.current = {x: -speed.current, y: 0};
                 break;
             case "ArrowRight":
             case "KeyD":
-                if(direction.current.x < 0) return
+                if(currentDirection.current.x < 0) return
                 direction.current = {x: speed.current, y: 0};
                 break;
             case "Space":
@@ -119,26 +117,22 @@ export const Game = ({size}: IGameProps) => {
                 snake.data.pos.forEach((p: Position, index: number) => {
                     if(index === 0) {
                         p.prev = {x: p.x, y: p.y};
-                        p.x = processPos.x(p.x + direction.current.x);
-                        p.y = processPos.y(p.y + direction.current.y);
+                        // process minimum range to rotate
+                        if(JSON.stringify(direction.current) !== JSON.stringify(currentDirection.current) && ((p.x + cellSize < lastRotate.current.x || p.x - cellSize > lastRotate.current.x) ||  (p.y + cellSize < lastRotate.current.y ||  p.y - cellSize > lastRotate.current.y))) {
+                            lastRotate.current = {x: p.x, y: p.y};
+                            currentDirection.current = direction.current;
+                        }
+                        p.x = processPos.x(p.x + currentDirection.current.x);
+                        p.y = processPos.y(p.y + currentDirection.current.y);
                     } else {
                         p.prev = {x: p.x, y: p.y};
                         p.x = snake.data.pos[index - 1].prev.x;
                         p.y = snake.data.pos[index - 1].prev.y;
-                        if(checkIntersects(head, p, speed.current)) {
+                        if(index > (cellSize * 3) / speed.current && checkIntersects(head, p, cellSize)) {
                             setFinished(true);
                             started.current = false;
                             clearInterval(animation);
                         }
-                        // p.x = p.x - (snake.data.pos[index - 1].prev.x - snake.data.pos[index - 1].x);
-                        // p.y = p.y - (snake.data.pos[index - 1].prev.y - snake.data.pos[index - 1].y);
-                        // if(snake.data.pos[index - 1].prev.x > p.x) {
-                        //     p.x = snake.data.pos[index - 1].prev.x - cellSize
-                        //     p.y = snake.data.pos[index - 1].prev.y;
-                        // } else {
-                        //     p.x = snake.data.pos[index - 1].prev.x;
-                        //     p.y = snake.data.pos[index - 1].prev.y - cellSize;
-                        // }
                     }
                 });
                 apples.forEach((apple, index) => {
@@ -208,21 +202,14 @@ export const Game = ({size}: IGameProps) => {
             {finished && 
                 <>
                     <h3>GAME OVER</h3>
+                    <h3>{score}</h3>
                     {!isMobile && 
                         <>
-                            <p>Hold <b>SPACE</b> to continue.</p>
                             <p>Press <b>R</b> to restart.</p>
                         </>
                     }
                     {isMobile && 
                         <div>
-                            <button onClick={() => {
-                                if(!started.current) {
-                                    play.current();
-                                    started.current = true;
-                                    setFinished(false);
-                                }
-                            }}>Continue</button>
                             <button onClick={() => {
                                 if(!started.current) window.location.reload();
                             }}>Restart</button>
