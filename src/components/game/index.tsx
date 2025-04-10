@@ -40,7 +40,7 @@ export const Game = ({ size }: IGameProps) => {
 
     const min = Math.floor(time / 60);
     const sec = time % 60;
-    const formattedTime = `${min > 0 ? `${min} min` : ""} ${sec > 0 ? `${sec}` : ""} s`;
+    const formattedTime = `${min > 0 ? `${min} min` : ""} ${sec > 0 ? `${sec}s` : ""}`;
 
     // motion controller
     const processPos = {
