@@ -4,20 +4,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     canvas {
         width: 100%;
         height: 100%;
     }
+
     .start {
         display: flex;
         align-items: center;
         flex-direction: column;
         gap: 10px;
+
         button {
             color: white;
             margin-top: 100px;
         }
     }
+
     .info {
         position: absolute;
         left: 0;
@@ -29,12 +33,19 @@
         justify-content: center;
         align-items: center;
         color: rgba(0, 0, 0, 0.21);
+
         h3 {
             font-size: 50px;
         }
+
+        h4 {
+            color: rgba(16, 50, 117, 0.403);
+        }
+
         p {
             font-size: 20px;
         }
+
         div {
             margin-top: 20px;
             display: flex;
@@ -42,6 +53,7 @@
             gap: 10px;
         }
     }
+
     .controller {
         position: absolute;
         opacity: 0.4;
@@ -54,16 +66,20 @@
         font-size: 25px;
         justify-content: center;
         align-items: center;
+
         div {
             display: flex;
             gap: 50px;
         }
+
         .up {
             rotate: 270deg;
         }
+
         .down {
             rotate: 90deg;
         }
+
         .left {
             rotate: 180deg;
         }
@@ -78,7 +94,7 @@
     align-items: center;
     background: #222;
     border-radius: var(--border-width);
-  
+
     &::after {
         position: absolute;
         content: "";
@@ -87,24 +103,22 @@
         z-index: -1;
         width: calc(100% + var(--border-width) * 2);
         height: calc(100% + var(--border-width) * 2);
-        background: linear-gradient(
-            60deg,
-            hsl(224, 85%, 66%),
-            hsl(269, 85%, 66%),
-            hsl(314, 85%, 66%),
-            hsl(359, 85%, 66%),
-            hsl(44, 85%, 66%),
-            hsl(89, 85%, 66%),
-            hsl(134, 85%, 66%),
-            hsl(179, 85%, 66%)
-        );
+        background: linear-gradient(60deg,
+                hsl(224, 85%, 66%),
+                hsl(269, 85%, 66%),
+                hsl(314, 85%, 66%),
+                hsl(359, 85%, 66%),
+                hsl(44, 85%, 66%),
+                hsl(89, 85%, 66%),
+                hsl(134, 85%, 66%),
+                hsl(179, 85%, 66%));
         background-size: 300% 300%;
         background-position: 0 50%;
         border-radius: calc(2 * var(--border-width));
         animation: moveGradient 4s alternate infinite;
     }
 }
-  
+
 @keyframes moveGradient {
     50% {
         background-position: 100% 50%;
